@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAFFRON — Premium Coffee</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-content">
+    <div class="loading-logo">SAFFRON</div>
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading...</div>
+    <div class="loading-credit">
+      <span>Developed by</span>
+      <span class="credit-name">ENG/ Riad Kassab</span>
+    </div>
+  </div>
+</div>
+
+<!-- THREE.JS CANVAS -->
+<canvas id="canvas-bg"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">SAFFRON</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#featured" data-en="Menu" data-ar="القائمة">Menu</a>
+    <a href="#about" data-en="Our Story" data-ar="قصتنا">Our Story</a>
+    <a href="#reviews" data-en="Reviews" data-ar="التقييمات">Reviews</a>
+    <a href="#contact" data-en="Contact" data-ar="تواصل">Contact</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;">
+    <button class="lang-toggle desktop-only" id="langToggleDesktop">AR</button>
+    <button class="theme-toggle desktop-only" id="themeToggleDesktop">☽</button>
+    <a href="#featured" class="btn-whatsapp desktop-only" data-en="Order Now" data-ar="اطلب الآن">Order Now</a>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- CART -->
+<div class="cart-indicator" id="cartIndicator">
+  <button class="cart-btn" id="cartBtn">
+    <span>🛒</span>
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</div>
+
+<!-- CART MODAL -->
+<div class="cart-modal" id="cartModal">
+  <div class="cart-modal-content">
+    <div class="cart-modal-header">
+      <h2 data-en="Shopping Cart" data-ar="سلة التسوق">Shopping Cart</h2>
+      <button class="cart-modal-close" id="cartModalClose">✕</button>
+    </div>
+    <div class="cart-modal-body" id="cartModalBody">
+      <!-- Cart items will be rendered here -->
+    </div>
+    <div class="cart-modal-total" id="cartModalTotal">
+      <!-- Total will be rendered here -->
+    </div>
+    <div class="cart-modal-footer">
+      <button class="btn-whatsapp" id="checkoutBtn" data-en="Send Order via WhatsApp" data-ar="إرسال الطلب عبر واتساب">Send Order via WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose">✕</button>
+  <a href="#featured" class="mobile-menu-link" data-en="Menu" data-ar="القائمة">Menu</a>
+  <a href="#about" class="mobile-menu-link" data-en="Our Story" data-ar="قصتنا">Our Story</a>
+  <a href="#reviews" class="mobile-menu-link" data-en="Reviews" data-ar="التقييمات">Reviews</a>
+  <a href="#contact" class="mobile-menu-link" data-en="Contact" data-ar="تواصل">Contact</a>
+  <a href="#featured" class="btn-whatsapp mobile-order-btn" data-en="Order Now" data-ar="اطلب الآن">Order Now</a>
+  <div class="mobile-menu-controls">
+    <button class="lang-toggle" id="langToggleMobile">AR</button>
+    <button class="theme-toggle" id="themeToggleMobile">☽</button>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a class="wa-float" href="https://wa.me/+201098277229" target="_blank" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <p class="hero-tagline" id="heroTagline" data-en="Single Origin · Hand Roasted · Delivered Fresh" data-ar="أصل واحد · محمص يدوياً · طازج دائماً">Single Origin · Hand Roasted · Delivered Fresh</p>
+    <h1 class="hero-title" id="heroTitle">
+      <span data-en="Where Every Cup" data-ar="حيث كل فنجان">Where Every Cup</span><br><em data-en="Tells a Story" data-ar="يروي قصة">Tells a Story</em>
+    </h1>
+    <p class="hero-sub" id="heroSub" data-en="Premium coffee sourced from the world's finest highlands, roasted to perfection in our artisan workshop." data-ar="قهوة فاخرة من أرقى المرتفعات في العالم، محمصة بإتقان في ورشتنا الحرفية.">
+      Premium coffee sourced from the world's finest highlands, roasted to perfection in our artisan workshop.
+    </p>
+    <div class="hero-cta" id="heroCta">
+      <a href="#featured" class="btn-whatsapp" data-en="Explore Menu" data-ar="استعرض القائمة">Explore Menu</a>
+      <a href="#about" class="btn-outline" data-en="Our Story" data-ar="قصتنا">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-scroll" id="heroScroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section id="featured">
+  <div style="text-align:center;">
+    <span class="section-label" data-en="Best Sellers" data-ar="الأكثر مبيعاً">Best Sellers</span>
+    <h2 class="section-title reveal" data-en="Curated <em>Favourites</em>" data-ar="المفضلة <em>المختارة</em>">Curated <em>Favourites</em></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="products-grid" id="productsGrid">
+    <!-- Populated by JS -->
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <span class="section-label" data-en="Our Menu" data-ar="قائمتنا">Our Menu</span>
+  <h2 class="section-title reveal"><span data-en="The Full" data-ar="المجموعة">The Full</span> <em data-en="Collection" data-ar="الكاملة">Collection</em></h2>
+  <div class="divider" style="margin-left:0;"></div>
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active" data-cat="all" data-en="All" data-ar="الكل">All</button>
+    <button class="cat-tab" data-cat="hot" data-en="Hot Drinks" data-ar="مشروبات ساخنة">Hot Drinks</button>
+    <button class="cat-tab" data-cat="cold" data-en="Cold Drinks" data-ar="مشروبات باردة">Cold Drinks</button>
+    <button class="cat-tab" data-cat="dessert" data-en="Desserts" data-ar="حلويات">Desserts</button>
+    <button class="cat-tab" data-cat="beans" data-en="Beans" data-ar="حبوب القهوة">Beans</button>
+  </div>
+  <div class="products-grid" id="menuGrid">
+    <!-- Populated by JS -->
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <img class="about-img-main" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80" alt="Coffee roasting"/>
+      <img class="about-img-accent" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80" alt="Coffee cup"/>
+      <div class="about-stat">
+        <span class="num">14+</span>
+        <span class="lbl" data-en="Years of Craft" data-ar="سنوات من الحرفة">Years of Craft</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <span class="section-label" data-en="Our Story" data-ar="قصتنا">Our Story</span>
+      <h2 class="section-title reveal" data-en="Born from <em>Passion</em>" data-ar="وُلدنا من <em>الشغف</em>">Born from <em>Passion</em></h2>
+      <div class="divider" style="margin-left:0;"></div>
+      <p class="reveal" data-en="SAFFRON began as a single roaster's dream — to bring the world's rarest coffee experiences to those who truly appreciate the art of the cup. Every bean we source carries a story of its land, its farmers, its journey." data-ar="بدأت سافرون كحلم محمص واحد — لإحضار أندر تجارب القهوة في العالم لمن يقدر حقاً فن الكوب. كل حبة نختارها تحمل قصة أرضها وفلاحيها ورحلتها.">
+        SAFFRON began as a single roaster's dream — to bring the world's rarest coffee experiences to those who truly appreciate the art of the cup. Every bean we source carries a story of its land, its farmers, its journey.
+      </p>
+      <p class="reveal" data-en="From the highlands of Ethiopia to the volcanic slopes of Guatemala, we partner directly with farmers who share our obsession with quality, sustainability, and flavor complexity." data-ar="من مرتفعات إثيوبيا إلى المنحدرات البركانية في غواتيمالا، نتشارك مباشرة مع المزارعين الذين يشاطروننا هوسنا بالجودة والاستدامة وتعقيد النكهة.">
+        From the highlands of Ethiopia to the volcanic slopes of Guatemala, we partner directly with farmers who share our obsession with quality, sustainability, and flavor complexity.
+      </p>
+      <div class="quality-points">
+        <div class="quality-point reveal">
+          <div class="qp-icon">✦</div>
+          <div class="qp-text">
+            <strong data-en="Single Origin Sourcing" data-ar="مصادر أحادية الأصل">Single Origin Sourcing</strong>
+            <span data-en="Direct relationships with farmers across 12 countries" data-ar="علاقات مباشرة مع مزارعين في 12 دولة">Direct relationships with farmers across 12 countries</span>
+          </div>
+        </div>
+        <div class="quality-point reveal">
+          <div class="qp-icon">✦</div>
+          <div class="qp-text">
+            <strong data-en="Small-Batch Roasting" data-ar="تحميص بدفعات صغيرة">Small-Batch Roasting</strong>
+            <span data-en="Roasted to order, never sitting on a shelf for weeks" data-ar="محمص عند الطلب، لا يجلس على الرف لأسابيع">Roasted to order, never sitting on a shelf for weeks</span>
+          </div>
+        </div>
+        <div class="quality-point reveal">
+          <div class="qp-icon">✦</div>
+          <div class="qp-text">
+            <strong data-en="Expert Barista Team" data-ar="فريق باريستا خبراء">Expert Barista Team</strong>
+            <span data-en="Award-winning baristas trained in specialty coffee" data-ar="باريستا حائزون على جوائز متخصصون في القهوة المختصة">Award-winning baristas trained in specialty coffee</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div style="text-align:center;">
+    <span class="section-label" data-en="What People Say" data-ar="ما يقوله الناس">What People Say</span>
+    <h2 class="section-title reveal"><span data-en="Voices of" data-ar="أصوات">Voices of</span> <em data-en="Delight" data-ar="السعادة">Delight</em></h2>
+    <div class="divider"></div>
+    <div style="margin-top:1rem;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:3rem;color:var(--gold);">4.9</span>
+      <span style="color:var(--gold);font-size:1.2rem;margin-left:0.5rem;">★★★★★</span>
+      <p style="font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,237,216,0.4);margin-top:0.3rem;" data-en="Based on 2,400+ reviews" data-ar="بناءً على أكثر من 2400 تقييم">Based on 2,400+ reviews</p>
+    </div>
+  </div>
+  <div class="reviews-track" id="reviewsTrack"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="text-align:center;margin-bottom:1rem;">
+    <span class="section-label" data-en="Get In Touch" data-ar="تواصل معنا">Get In Touch</span>
+    <h2 class="section-title reveal"><span data-en="Let's" data-ar="لنتواصل">Let's</span> <em data-en="Connect" data-ar="معاً">Connect</em></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="contact-grid">
+    <div>
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="cName" placeholder="Your Name" data-placeholder-en="Your Name" data-placeholder-ar="اسمك"/>
+        <input type="text" id="cSubject" placeholder="Subject" data-placeholder-en="Subject" data-placeholder-ar="الموضوع"/>
+        <textarea id="cMessage" placeholder="Your message..." data-placeholder-en="Your message..." data-placeholder-ar="رسالتك..."></textarea>
+        <button type="button" class="btn-whatsapp" onclick="sendContactForm()" data-en="Send via WhatsApp" data-ar="إرسال عبر واتساب">Send via WhatsApp</button>
+      </form>
+    </div>
+    <div>
+      <div class="contact-info-item">
+        <div class="ci-icon">*</div>
+        <div class="ci-text">
+          <strong data-en="Visit Us" data-ar="زرنا">Visit Us</strong>
+          <span data-en="123 Coffee Street, Riyadh, Saudi Arabia" data-ar="شارع القهوة ١٢٣، الرياض، السعودية">123 Coffee Street, Riyadh, Saudi Arabia</span>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">*</div>
+        <div class="ci-text">
+          <strong data-en="Call Us" data-ar="اتصل بنا">Call Us</strong>
+          <span>+966 12 345 6789</span>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">✉</div>
+        <div class="ci-text">
+          <strong data-en="Email Us" data-ar="راسلنا">Email Us</strong>
+          <span>hello@saffron.coffee</span>
+        </div>
+      </div>
+      <div class="social-bar">
+        <a href="#" class="social-link">f</a>
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">📷</a>
+      </div>
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.2563842935847!2d46.6753!3d24.7136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%2C%20Saudi%20Arabia!5e0!3m2!1sen!2s!4v+201098277229123!5m2!1sen!2s" 
+          width="100%" 
+          height="250" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SAFFRON</div>
+  <p class="footer-copy">© 2024 SAFFRON Coffee. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
