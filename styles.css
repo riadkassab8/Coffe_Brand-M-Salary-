@@ -1346,6 +1346,86 @@ footer {
     bottom: 1.5rem;
     right: 1.5rem;
   }
+  
+  /* Cart Modal Mobile */
+  .cart-modal-content {
+    max-width: 95%;
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+  
+  .cart-modal-header {
+    padding: 1.5rem;
+  }
+  
+  .cart-modal-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .cart-modal-body {
+    padding: 1rem;
+  }
+  
+  .cart-item {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .cart-item-img {
+    width: 100%;
+    height: 180px;
+  }
+  
+  .cart-item-details {
+    width: 100%;
+  }
+  
+  .cart-item-controls {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  
+  .cart-item-remove {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .cart-modal-footer {
+    padding: 1rem;
+  }
+  
+  .cart-modal-footer .btn-whatsapp {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Category Tabs Mobile */
+  .cat-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 0.5rem;
+  }
+  
+  .cat-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .cat-tabs::-webkit-scrollbar-track {
+    background: rgba(200, 135, 58, 0.1);
+  }
+  
+  .cat-tabs::-webkit-scrollbar-thumb {
+    background: var(--caramel);
+    border-radius: 2px;
+  }
+  
+  .cat-tab {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
 }
 
 /* LARGE SCREENS */
@@ -1853,6 +1933,20 @@ footer {
   
   .search-btn {
     padding: 1rem;
+  }
+  
+  .product-modal-content {
+    max-width: 95%;
+    border-radius: 12px;
+  }
+  
+  .product-modal-body {
+    padding: 1.5rem;
+  }
+  
+  .product-modal-close {
+    top: 1rem;
+    right: 1rem;
   }
 }
   display: flex;
