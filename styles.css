@@ -474,6 +474,34 @@ section {
 .product-img-wrap {
   overflow: hidden;
   position: relative;
+  cursor: pointer;
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 14, 6, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.view-details {
+  color: var(--gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--gold);
+  padding: 0.8rem 1.5rem;
 }
 
 .product-badge {
@@ -499,6 +527,12 @@ section {
   font-weight: 400;
   color: var(--cream);
   margin-bottom: 0.4rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.product-name:hover {
+  color: var(--gold);
 }
 
 .light-mode .product-name {
@@ -553,6 +587,71 @@ section {
 /* MENU */
 #menu {
   padding: 8rem 4rem;
+}
+
+/* SEARCH BAR */
+.search-container {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 600px;
+  margin: 2rem 0;
+}
+
+.search-input {
+  flex: 1;
+  background: rgba(61, 32, 16, 0.3);
+  border: 1px solid rgba(200, 135, 58, 0.2);
+  color: var(--cream);
+  padding: 1rem 1.5rem;
+  font-family: "Jost", sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.light-mode .search-input {
+  background: rgba(245, 237, 216, 0.5);
+  color: var(--espresso);
+}
+
+.search-input:focus {
+  border-color: var(--caramel);
+}
+
+.search-input::placeholder {
+  color: rgba(245, 237, 216, 0.35);
+}
+
+.light-mode .search-input::placeholder {
+  color: rgba(26, 14, 6, 0.35);
+}
+
+.search-btn {
+  background: var(--caramel);
+  border: none;
+  color: var(--espresso);
+  padding: 0 1.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.search-btn:hover {
+  background: var(--gold);
+  transform: translateY(-2px);
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(245, 237, 216, 0.4);
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.light-mode .no-results {
+  color: rgba(26, 14, 6, 0.4);
 }
 
 .cat-tabs {
@@ -970,10 +1069,10 @@ footer {
 .wa-float:hover {
   transform: scale(1.1);
 }
-.wa-float svg {
-  width: 26px;
-  height: 26px;
-  fill: white;
+
+.wa-float i {
+  font-size: 28px;
+  color: white;
 }
 
 /* THEME TOGGLE */
@@ -1041,14 +1140,16 @@ footer {
   border-radius: 50%;
   color: var(--espresso);
   cursor: pointer;
-  font-family: "El Messiri", "Jost", sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   transition: all 0.3s ease;
   box-shadow: 0 4px 20px rgba(200, 135, 58, 0.4);
-  font-size: 1.5rem;
+}
+
+.cart-btn i {
+  font-size: 1.3rem;
 }
 
 .cart-btn:hover {
@@ -1579,6 +1680,180 @@ footer {
 
 .cart-item-remove:active {
   transform: translateY(0);
+}
+
+/* PRODUCT DETAIL MODAL */
+.product-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(12px);
+  animation: fadeIn 0.3s ease;
+}
+
+.product-modal.open {
+  display: flex;
+}
+
+.product-modal-content {
+  background: linear-gradient(145deg, var(--espresso) 0%, var(--smoke) 100%);
+  border: 2px solid var(--caramel);
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUpScale 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(200, 135, 58, 0.2);
+}
+
+.light-mode .product-modal-content {
+  background: linear-gradient(145deg, var(--mist) 0%, #f8f4e8 100%);
+}
+
+.product-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(200, 135, 58, 0.1);
+  border: 1px solid var(--caramel);
+  border-radius: 50%;
+  color: var(--cream);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.light-mode .product-modal-close {
+  color: var(--espresso);
+}
+
+.product-modal-close:hover {
+  background: var(--caramel);
+  color: var(--espresso);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.product-modal-body {
+  padding: 2rem;
+}
+
+.product-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.product-modal-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 2px solid rgba(200, 135, 58, 0.3);
+}
+
+.product-modal-img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.product-badge-large {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: var(--caramel);
+  color: var(--espresso);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+}
+
+.product-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.product-modal-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--cream);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.light-mode .product-modal-title {
+  color: var(--espresso);
+}
+
+.product-modal-category {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--caramel);
+}
+
+.product-modal-price {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.product-modal-desc {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(245, 237, 216, 0.7);
+}
+
+.light-mode .product-modal-desc {
+  color: rgba(26, 14, 6, 0.7);
+}
+
+@media (max-width: 768px) {
+  .product-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .product-modal-img {
+    height: 300px;
+  }
+  
+  .product-modal-title {
+    font-size: 2rem;
+  }
+  
+  .search-container {
+    flex-direction: column;
+  }
+  
+  .search-btn {
+    padding: 1rem;
+  }
 }
   display: flex;
   align-items: center;

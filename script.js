@@ -188,25 +188,37 @@ window.addEventListener('scroll', () => {
 let cart = [];
 let currentLang = 'en';
 let currentCat = 'all';
+let searchQuery = '';
 
 function renderProducts(container, items) {
   container.innerHTML = '';
+  
+  if (items.length === 0) {
+    const noResults = currentLang === 'ar' ? 'لا توجد نتائج' : 'No results found';
+    container.innerHTML = `<div class="no-results">${noResults}</div>`;
+    return;
+  }
+  
   items.forEach((p, i) => {
     const n = currentLang === 'ar' ? p.nameAr : p.name;
     const d = currentLang === 'ar' ? p.descAr : p.desc;
     const pr = currentLang === 'ar' ? p.priceAr : p.price;
     const addTxt = currentLang === 'ar' ? 'أضف للطلب' : 'Add to Order';
+    const viewTxt = currentLang === 'ar' ? 'عرض التفاصيل' : 'View Details';
     const card = document.createElement('div');
     card.className = 'product-card';
     card.style.opacity = '0';
     card.style.transform = 'translateY(30px)';
     card.innerHTML = `
-      <div class="product-img-wrap">
+      <div class="product-img-wrap" onclick="openProductModal(${p.id})">
         <img class="product-img" src="${p.img}" alt="${n}" loading="lazy"/>
         ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        <div class="product-overlay">
+          <span class="view-details">${viewTxt}</span>
+        </div>
       </div>
       <div class="product-info">
-        <h3 class="product-name">${n}</h3>
+        <h3 class="product-name" onclick="openProductModal(${p.id})">${n}</h3>
         <p class="product-desc">${d}</p>
         <div class="product-footer">
           <span class="product-price">${pr}</span>
@@ -405,10 +417,94 @@ document.getElementById('catTabs').addEventListener('click', e => {
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentCat = btn.dataset.cat;
-  const filtered = currentCat === 'all' ? products : products.filter(p => p.cat === currentCat);
+  filterProducts();
+});
+
+// Search functionality
+function filterProducts() {
+  let filtered = products;
+  
+  // Filter by category
+  if (currentCat !== 'all') {
+    filtered = filtered.filter(p => p.cat === currentCat);
+  }
+  
+  // Filter by search query
+  if (searchQuery.trim() !== '') {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => {
+      const name = currentLang === 'ar' ? p.nameAr : p.name;
+      const desc = currentLang === 'ar' ? p.descAr : p.desc;
+      return name.toLowerCase().includes(query) || desc.toLowerCase().includes(query);
+    });
+  }
+  
   const grid = document.getElementById('menuGrid');
   renderProducts(grid, filtered);
   gsap.to('.product-card', { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' });
+}
+
+// Search input event
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  filterProducts();
+});
+
+document.getElementById('searchBtn').addEventListener('click', () => {
+  filterProducts();
+});
+
+// Product Modal
+function openProductModal(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  
+  const modal = document.getElementById('productModal');
+  const body = document.getElementById('productModalBody');
+  
+  const n = currentLang === 'ar' ? p.nameAr : p.name;
+  const d = currentLang === 'ar' ? p.descAr : p.desc;
+  const pr = currentLang === 'ar' ? p.priceAr : p.price;
+  const addTxt = currentLang === 'ar' ? 'أضف للطلب' : 'Add to Order';
+  const catLabel = currentLang === 'ar' ? 'الفئة' : 'Category';
+  
+  let catName = '';
+  switch(p.cat) {
+    case 'hot': catName = currentLang === 'ar' ? 'مشروبات ساخنة' : 'Hot Drinks'; break;
+    case 'cold': catName = currentLang === 'ar' ? 'مشروبات باردة' : 'Cold Drinks'; break;
+    case 'dessert': catName = currentLang === 'ar' ? 'حلويات' : 'Desserts'; break;
+    case 'beans': catName = currentLang === 'ar' ? 'حبوب القهوة' : 'Coffee Beans'; break;
+    default: catName = currentLang === 'ar' ? 'الكل' : 'All';
+  }
+  
+  body.innerHTML = `
+    <div class="product-modal-grid">
+      <div class="product-modal-img-wrap">
+        <img class="product-modal-img" src="${p.img}" alt="${n}"/>
+        ${p.badge ? `<span class="product-badge-large">${p.badge}</span>` : ''}
+      </div>
+      <div class="product-modal-info">
+        <h2 class="product-modal-title">${n}</h2>
+        <div class="product-modal-category">${catLabel}: ${catName}</div>
+        <div class="product-modal-price">${pr}</div>
+        <p class="product-modal-desc">${d}</p>
+        <button class="btn-whatsapp" onclick="addToCart(${p.id}); closeProductModal();">${addTxt}</button>
+      </div>
+    </div>`;
+  
+  modal.classList.add('open');
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('open');
+}
+
+document.getElementById('productModalClose').addEventListener('click', closeProductModal);
+
+document.getElementById('productModal').addEventListener('click', (e) => {
+  if (e.target.id === 'productModal') {
+    closeProductModal();
+  }
 });
 
 // ============================================================
