@@ -1534,6 +1534,11 @@ footer {
   opacity: 0.1;
 }
 
+[dir="rtl"] .cart-modal-header::before {
+  left: auto;
+  right: 2.5rem;
+}
+
 .cart-modal-header h2 {
   font-family: "Cormorant Garamond", serif;
   font-size: 2rem;

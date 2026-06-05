@@ -1,0 +1,242 @@
+/* Coffee Toast Notifications */
+.coffee-toast-container {
+  position: fixed;
+  top: 6rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+[dir="rtl"] .coffee-toast-container {
+  right: auto;
+  left: 2rem;
+}
+
+.coffee-toast {
+  background: linear-gradient(135deg, #1a0e06 0%, #2a1a0c 100%);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  min-width: 320px;
+  max-width: 420px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  pointer-events: auto;
+  animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-left: 4px solid;
+  position: relative;
+  overflow: hidden;
+}
+
+.light-mode .coffee-toast {
+  background: linear-gradient(135deg, #f5edd8 0%, #ede5d0 100%);
+}
+
+/* Border colors by type */
+.coffee-toast-success { border-left-color: #5C8A36; }
+.coffee-toast-error { border-left-color: #B03030; }
+.coffee-toast-info { border-left-color: #7B4F2E; }
+.coffee-toast-loading { border-left-color: #A87040; }
+
+/* Slide in animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir="rtl"] .coffee-toast {
+  animation: slideInRTL 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideInRTL {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide out animation */
+.coffee-toast.hide {
+  animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+  to {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+[dir="rtl"] .coffee-toast.hide {
+  animation: slideOutRTL 0.3s ease forwards;
+}
+
+@keyframes slideOutRTL {
+  to {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+}
+
+/* Coffee cup icon container */
+.coffee-toast-icon {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coffee-toast-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Steam animation */
+.steam {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+}
+
+.steam::before,
+.steam::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  background: rgba(200, 135, 58, 0.6);
+  border-radius: 50%;
+  animation: steamRise 2s ease-in-out infinite;
+}
+
+.steam::before {
+  left: 0;
+  animation-delay: 0s;
+}
+
+.steam::after {
+  right: 0;
+  animation-delay: 0.5s;
+}
+
+.coffee-toast:hover .steam {
+  opacity: 1;
+}
+
+@keyframes steamRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-20px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Icon colors */
+.coffee-toast-success svg {
+  fill: #5C8A36;
+}
+
+.coffee-toast-error svg {
+  fill: #B03030;
+}
+
+.coffee-toast-info svg {
+  fill: #7B4F2E;
+}
+
+.coffee-toast-loading svg {
+  fill: #A87040;
+  animation: cupShake 0.5s ease-in-out infinite;
+}
+
+@keyframes cupShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+/* Toast message */
+.coffee-toast-message {
+  flex: 1;
+  color: #f5edd8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-family: "Jost", sans-serif;
+}
+
+.light-mode .coffee-toast-message {
+  color: #1a0e06;
+}
+
+[dir="rtl"] .coffee-toast-message {
+  font-family: "El Messiri", "Jost", sans-serif;
+}
+
+/* Close button */
+.coffee-toast-close {
+  background: none;
+  border: none;
+  color: #f5edd8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.light-mode .coffee-toast-close {
+  color: #1a0e06;
+}
+
+.coffee-toast-close:hover {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .coffee-toast-container {
+    top: 5rem;
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  [dir="rtl"] .coffee-toast-container {
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  .coffee-toast {
+    min-width: auto;
+    max-width: 100%;
+  }
+}

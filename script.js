@@ -262,6 +262,10 @@ function addToCart(id) {
   updateCartUI();
   // GSAP bounce
   gsap.fromTo('#cartIndicator', { scale: 1.2 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+  
+  // Show toast notification
+  const name = currentLang === 'ar' ? p.nameAr : p.name;
+  coffeeToast.success(currentLang === 'ar' ? `تمت إضافة ${name} إلى السلة` : `${name} added to cart`);
 }
 
 function updateCartUI() {
@@ -350,11 +354,12 @@ function sendContactForm() {
   const subj = document.getElementById('cSubject').value;
   const msg = document.getElementById('cMessage').value;
   if (!name || !msg) { 
-    alert(currentLang === 'ar' ? 'يرجى ملء الاسم والرسالة' : 'Please fill your name and message'); 
+    coffeeToast.error(currentLang === 'ar' ? 'يرجى ملء الاسم والرسالة' : 'Please fill your name and message');
     return; 
   }
   const text = encodeURIComponent(`Name: ${name}\nSubject: ${subj}\nMessage: ${msg}`);
   window.open(`https://wa.me/+201098277229?text=${text}`, '_blank');
+  coffeeToast.success(currentLang === 'ar' ? 'تم إرسال رسالتك بنجاح!' : 'Your message has been sent successfully!');
 }
 
 // Open cart modal
